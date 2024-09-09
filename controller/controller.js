@@ -1,6 +1,8 @@
 const functionL = require('../function/function')
 
-
+const getFun =(req,res)=>{
+  res.status(200).json({message:"Server Running perfectly"})
+}
 const getKey =(req,res)=>{
  return  res.send(functionL.returnKEy());
 }
@@ -25,4 +27,4 @@ const decToken = async (req,res)=>{
       }
     
 }
-module.exports = {getKey,postBody,getToken, decToken};
+module.exports = {getKey,postBody,getToken, decToken, getFun};
