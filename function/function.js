@@ -28,15 +28,20 @@ function splitToken(token) {
 
 
 const generateToken = async (obj)=> {
-    
-   const token =  await jwt.sign(obj,key);
-  const split_token = splitToken(token);
-   
+    let split_token;
+    await jwt.sign(obj,key,(err, token)=>{
+        if(err){
+            console.log("err")
+        }else{
+            split_token = splitToken(token);
+        }
+    });
+
    return split_token ;
 } 
 
 const decodeToken = async (a,b,c)=>{
-    const MergeToken = `${a}.${b}.${c}`
+    const MergeToken = `${a}.${b}.${c}`;
     let result;
       jwt.verify(MergeToken, key ,(err,info)=>{
         if (err){

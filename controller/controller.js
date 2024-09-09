@@ -9,6 +9,7 @@ const postBody = async (req,res)=>{
     res.send(result);
 }
 const getToken = async(req,res)=>{
+ 
     const token = await functionL.generateToken(req.body);
     res.send(token);
 }

@@ -1,10 +1,20 @@
 require('dotenv').config();
 const port = process.env.PORT || 3001;
+const dbURL = process.env.DB_URL;
 const express = require('express');
 const app = express();  
 const router = require('./router/router');
 
 app.use(express.json());
+// Note: check valid syntax come from frontend
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        
+        console.error('JSON Syntax Error:');
+        return res.status(400).json({ message: 'Invalid JSON format.' });
+    }
+    next(); 
+});
 app.use('/', router);
 
 app.listen(port,(err)=>{
