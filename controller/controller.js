@@ -27,4 +27,18 @@ const decToken = async (req,res)=>{
       }
     
 }
-module.exports = {getKey,postBody,getToken, decToken, getFun};
+
+const signUp = async (req,res)=>{
+ const {name,email,pass}= req.body;
+const newPass = await functionL.passEncrypt(pass);
+const obj = {name:name,email:email,pass:newPass}
+// upload object to DB
+    res.status(200).json(obj);
+}
+const login = async (req,res)=>{
+  const {name, email, pass} = req.body;
+  const info = await functionL.passDecrypt(pass);
+  
+  res.send(info)
+}
+module.exports = {getKey,postBody,getToken, decToken, getFun, signUp, login};
