@@ -5,5 +5,5 @@ router.route('/').get(controller.getFun);
 router.route('/').post(controller.login);
 router.route('/token').post(controller.getToken);
 router.route('/verify').post(controller.decToken);
-router.route('/signup').post(controller.signUp)
+router.route('/otp').post(controller.buyerRegisterOtp);
 module.exports = router;

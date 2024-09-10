@@ -28,12 +28,14 @@ const decToken = async (req,res)=>{
     
 }
 
+const buyerRegisterOtp = async (req,res)=>{
+ const otpBuyer = await functionL.gerateBuyerOtp(req.body);
+    res.json(otpBuyer);
+}
 const signUp = async (req,res)=>{
- const {name,email,pass}= req.body;
-const newPass = await functionL.passEncrypt(pass);
-const obj = {name:name,email:email,pass:newPass}
-// upload object to DB
-    res.status(200).json(obj);
+    const registerBuyer = await  functionL.registerBuyer(req.body);
+    res.send(registerBuyer);
+    
 }
 const login = async (req,res)=>{
   const {name, email, pass} = req.body;
@@ -41,4 +43,4 @@ const login = async (req,res)=>{
   
   res.send(info)
 }
-module.exports = {getKey,postBody,getToken, decToken, getFun, signUp, login};
+module.exports = {getKey,postBody,getToken, decToken, getFun, signUp, login, buyerRegisterOtp};

@@ -4,6 +4,7 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 // models import
 const schema = require('../models/schema');
+const transport = require('../mail/transporter.js')
 const returnKEy = () => {
     return key;
 }
@@ -70,10 +71,57 @@ const passEncrypt = async (pass) => {
         throw err; // Optional: Re-throw the error if you want to handle it further up
     }
 }
-const passDecrypt = async (pass)=>{
+const passDecrypt = async (pass, hash)=>{
 
-    const hash = "$2b$10$K15g2wX9gLA1R1.8nwA5vOpC/U4uWnxhYlHCSnNnCaSdHj7tg5KRm";
   const passCheck = await bcrypt.compare(pass, hash);
 return passCheck ;
 }
-module.exports = { returnKEy, returnSameBody, generateToken, decodeToken, passEncrypt, passDecrypt };
+
+// Check Buyer Email exsist
+ const buyerExsist = async (email)=>{
+
+   const avail = await schema.buyerModel.find({email:email})
+if(avail.length === 0){
+   return false;
+}else{
+    return true;
+}
+ }
+
+ const gerateBuyerOtp = async (obj)=>{
+    const checkAvail = await buyerExsist(obj.email);
+    if(checkAvail){
+        return "user exsist";
+    }else{
+        const rnum = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+     
+        const buyerOtpSend = await transport.transporter.sendMail({
+            from: process.env.SENDER_MAIL,
+            to: obj.email,
+            subject: `Verify Your OTP: ${rnum}`,
+            html:`please verify`
+           })
+
+           if(buyerOtpSend.accepted){
+            return {otp:rnum,email:obj.email};
+           }else{
+            return "email sending failed"
+           }
+    
+
+        
+    }
+ }
+ // Register Buyer
+
+const registerBuyer = async (obj) =>{
+    const encPass = await passEncrypt(obj.pass);
+    obj.pass= encPass;
+  const x = await schema.buyerModel.create(obj);
+  x.message = "user created"
+    return x;
+
+}
+module.exports = { returnKEy, returnSameBody, generateToken, 
+    decodeToken, passEncrypt, passDecrypt,  registerBuyer,
+     gerateBuyerOtp };
