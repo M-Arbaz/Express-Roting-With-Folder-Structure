@@ -20,7 +20,7 @@ const decToken = async (req,res)=>{
     const tokenToDecode = await functionL.decodeToken(tokenPart1,tokenPart2,tokenPart3);
         
 
-      if(tokenToDecode.message == "invalid signature"){
+      if(tokenToDecode.message == "invalid signature" || tokenToDecode._id == undefined){
         res.status(498).json(tokenToDecode);
       }else{
         res.status(200).json(tokenToDecode);
@@ -34,13 +34,15 @@ const buyerRegisterOtp = async (req,res)=>{
 }
 const signUpBuyer = async (req,res)=>{
     const registerBuyer = await  functionL.registerBuyer(req.body);
-    res.send(registerBuyer);
+    res.json(registerBuyer);
     
 }
-const login = async (req,res)=>{
-  const {name, email, pass} = req.body;
-  const info = await functionL.passDecrypt(pass);
+const loginBuyer = async (req,res)=>{
+  const info = await functionL.loginBuyer(req.body);
+  res.json(info);
+  // // const {name, email, pass} = req.body;
+  // // const info = await functionL.passDecrypt(pass);
   
-  res.send(info)
+  // res.send(info)
 }
-module.exports = {getKey,postBody,getToken, decToken, getFun, signUpBuyer, login, buyerRegisterOtp};
+module.exports = {getKey,postBody,getToken, decToken, getFun, signUpBuyer, loginBuyer, buyerRegisterOtp};

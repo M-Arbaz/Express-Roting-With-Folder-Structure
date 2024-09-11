@@ -4,7 +4,11 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 // models import
 const schema = require('../models/schema');
-const transport = require('../mail/transporter.js')
+const transport = require('../mail/transporter.js');
+const query = (param)=>{
+  return { $or: [{ email: param }, { name: param }]}
+};
+
 const returnKEy = () => {
     return key;
 }
@@ -34,21 +38,26 @@ function splitToken(token) {
 
 const generateToken = async (obj) => {
     let split_token;
-    await jwt.sign(obj, key, (err, token) => {
-        if (err) {
-            console.log("err")
-        } else {
-            split_token = splitToken(token);
-        }
+
+    const token = await new Promise((resolve, reject) => {
+        jwt.sign(obj, key, (err, token) => {
+            if (err) {
+                console.log("err", err);
+                reject(err);
+            } else {
+                resolve(token);
+            }
+        });
     });
 
+    split_token = splitToken(token);
     return split_token;
-}
+};
 
 const decodeToken = async (a, b, c) => {
     const MergeToken = `${a}.${b}.${c}`;
     let result;
-    jwt.verify(MergeToken, key, (err, info) => {
+   await jwt.verify(MergeToken, key, (err, info) => {
         if (err) {
             return result = err;
         } else {
@@ -78,9 +87,10 @@ const passDecrypt = async (pass, hash) => {
 }
 
 // Check Buyer Email exsist
-const buyerExsist = async (email) => {
-
-    const avail = await schema.buyerModel.find({ email: email })
+const Exsist = async (email,model) => {
+      const modl = schema[model];
+     
+    const avail = await modl.find({ email: email });
     if (avail.length === 0) {
         return false;
     } else {
@@ -89,7 +99,7 @@ const buyerExsist = async (email) => {
 }
 
 const gerateBuyerOtp = async (obj) => {
-    const checkAvail = await buyerExsist(obj.email);
+    const checkAvail = await Exsist(obj.email,"buyerModel");
     if (checkAvail) {
         return { message: "user exsist" };
     } else {
@@ -107,29 +117,42 @@ const gerateBuyerOtp = async (obj) => {
         } else {
             return "email sending failed"
         }
-
-
-
     }
 }
 // Register Buyer
 
 const registerBuyer = async (obj) => {
-    const checkAvail = await buyerExsist(obj.email);
+    const checkAvail = await Exsist(obj.email,"buyerModel");
     if (checkAvail) {
         return { message: "user exsist" };
     } else {
         const encPass = await passEncrypt(obj.pass);
         obj.pass = encPass;
-        const x = await schema.buyerModel.create(obj);
-        x.message = "user created"
+        obj.message = "success";
+        const x = await schema.buyerModel.create(obj);  
         return x;
     }
-
-
 }
+// login buyer
+const loginBuyer = async(obj)=>{
+const loginBuyer = await schema.buyerModel.findOne(query(obj.param));
+     if(loginBuyer !== null){
+        const checkPass = await passDecrypt(obj.pass,loginBuyer.pass);
+       if(checkPass){
+        const sendData = loginBuyer.toObject()
+        const token = await generateToken(sendData);
+        token.buyer_id = sendData._id;
+        token.message = "success"
+        return token;
+       }
+     }else{
+        return {message:"usernot found"};
+     }
+  
+} 
+
 module.exports = {
     returnKEy, returnSameBody, generateToken,
     decodeToken, passEncrypt, passDecrypt, registerBuyer,
-    gerateBuyerOtp
+    gerateBuyerOtp, loginBuyer
 };
