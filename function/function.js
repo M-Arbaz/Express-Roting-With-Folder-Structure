@@ -144,9 +144,11 @@ const loginBuyer = await schema.buyerModel.findOne(query(obj.param));
         token.buyer_id = sendData._id;
         token.message = "success"
         return token;
+       }else{
+        return {message:"password incorrect",status:401}
        }
      }else{
-        return {message:"usernot found"};
+        return {message:"user not found",status:404};
      }
   
 } 

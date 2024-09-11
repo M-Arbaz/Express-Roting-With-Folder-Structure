@@ -39,10 +39,6 @@ const signUpBuyer = async (req,res)=>{
 }
 const loginBuyer = async (req,res)=>{
   const info = await functionL.loginBuyer(req.body);
-  res.json(info);
-  // // const {name, email, pass} = req.body;
-  // // const info = await functionL.passDecrypt(pass);
-  
-  // res.send(info)
+  res.status(info.status ? info.status : 200).json(info);
 }
 module.exports = {getKey,postBody,getToken, decToken, getFun, signUpBuyer, loginBuyer, buyerRegisterOtp};
