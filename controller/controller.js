@@ -32,7 +32,7 @@ const buyerRegisterOtp = async (req,res)=>{
  const otpBuyer = await functionL.gerateBuyerOtp(req.body);
     res.json(otpBuyer);
 }
-const signUp = async (req,res)=>{
+const signUpBuyer = async (req,res)=>{
     const registerBuyer = await  functionL.registerBuyer(req.body);
     res.send(registerBuyer);
     
@@ -43,4 +43,4 @@ const login = async (req,res)=>{
   
   res.send(info)
 }
-module.exports = {getKey,postBody,getToken, decToken, getFun, signUp, login, buyerRegisterOtp};
+module.exports = {getKey,postBody,getToken, decToken, getFun, signUpBuyer, login, buyerRegisterOtp};
