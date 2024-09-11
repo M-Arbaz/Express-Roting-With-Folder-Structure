@@ -41,4 +41,9 @@ const loginBuyer = async (req,res)=>{
   const info = await functionL.loginBuyer(req.body);
   res.status(info.status ? info.status : 200).json(info);
 }
-module.exports = {getKey,postBody,getToken, decToken, getFun, signUpBuyer, loginBuyer, buyerRegisterOtp};
+const buyerPassUpdate = async (req,res)=>{
+  const updateBuyerPass = await functionL.buyerPassUpdate(req.body);
+  console.log(req.body);
+}
+module.exports = {getKey,postBody,getToken, decToken, getFun,
+   signUpBuyer, loginBuyer, buyerRegisterOtp, buyerPassUpdate};

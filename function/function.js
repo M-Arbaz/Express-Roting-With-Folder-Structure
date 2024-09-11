@@ -119,6 +119,7 @@ const gerateBuyerOtp = async (obj) => {
         }
     }
 }
+
 // Register Buyer
 
 const registerBuyer = async (obj) => {
@@ -150,11 +151,15 @@ const loginBuyer = await schema.buyerModel.findOne(query(obj.param));
      }else{
         return {message:"user not found",status:404};
      }
-  
 } 
-
+// update buyer pass
+const buyerPassUpdate = async (obj)=>{
+         const newPass = await schema.buyerModel
+         .findOneAndUpdate({email:obj.email},{pass:passEncrypt(obj.pass)})
+         console.log(newPass);
+}
 module.exports = {
     returnKEy, returnSameBody, generateToken,
     decodeToken, passEncrypt, passDecrypt, registerBuyer,
-    gerateBuyerOtp, loginBuyer
+    gerateBuyerOtp, loginBuyer, buyerPassUpdate
 };
