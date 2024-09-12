@@ -74,6 +74,7 @@ const passEncrypt = async (pass) => {
     try {
         // Use await to get the hash value directly
         const hash = await bcrypt.hash(pass, saltRounds);
+        console.log(hash);
         return hash;
     } catch (err) {
         console.error("Error in bcrypt hashing:", err);
@@ -153,13 +154,41 @@ const loginBuyer = await schema.buyerModel.findOne(query(obj.param));
      }
 } 
 // update buyer pass
-const buyerPassUpdate = async (obj)=>{
-         const newPass = await schema.buyerModel
-         .findOneAndUpdate({email:obj.email},{pass:passEncrypt(obj.pass)})
-         console.log(newPass);
+// this will send mail to user email if user exsist
+const buyerPassUpdate = async (obj)=>{ 
+    const checkUser = await Exsist(obj.email,"buyerModel")
+    if(checkUser){
+    const found_id = await schema.buyerModel.findOne({email:obj.email});
+    const rnum = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+    const resetLink = `https://${process.env.PLATFORM_NAME}/update/pass/user/buyer?rotp=${found_id._id}&chksoun=${rnum}`
+    
+        const buyerEmailResetLink = await transport.transporter.sendMail({
+            from: process.env.SENDER_MAIL,
+            to: obj.email,
+            subject: `Reset Your Password`,
+            html: ` your rest link: ${resetLink}`
+        })
+        if (buyerEmailResetLink.accepted) {
+            return { message:"success", status:200 };
+        } else {
+            return {message: "email sending failed", status:500 };
+        }
+
+    }else{
+        return {message:"user not found"};
+    }
+}
+const resetBuyerPass = async (obj) =>{
+
+    const updateNewPass = await passEncrypt(obj.pass)
+    const newPass = await schema.buyerModel
+    .findByIdAndUpdate(obj._id,{pass:updateNewPass});
+    console.log(newPass);
+    return  {status:200} ;
+
 }
 module.exports = {
     returnKEy, returnSameBody, generateToken,
     decodeToken, passEncrypt, passDecrypt, registerBuyer,
-    gerateBuyerOtp, loginBuyer, buyerPassUpdate
+    gerateBuyerOtp, loginBuyer, buyerPassUpdate, resetBuyerPass
 };

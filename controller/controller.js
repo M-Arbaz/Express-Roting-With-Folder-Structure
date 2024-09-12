@@ -41,9 +41,16 @@ const loginBuyer = async (req,res)=>{
   const info = await functionL.loginBuyer(req.body);
   res.status(info.status ? info.status : 200).json(info);
 }
+// this will send mail to email
 const buyerPassUpdate = async (req,res)=>{
-  const updateBuyerPass = await functionL.buyerPassUpdate(req.body);
-  console.log(req.body);
+  const updateBuyerPassEmailLink = await functionL.buyerPassUpdate(req.body);
+ res.status(updateBuyerPassEmailLink.status ? updateBuyerPassEmailLink.status : 400).json(updateBuyerPassEmailLink)
+}
+//  this will update buyer pAss
+const resetBuyerPass = async (req,res)=>{
+  const resetBuyerPass = await functionL.resetBuyerPass(req.body);
+  res.status(resetBuyerPass.status ? resetBuyerPass.status : 400 ).json(resetBuyerPass)
 }
 module.exports = {getKey,postBody,getToken, decToken, getFun,
-   signUpBuyer, loginBuyer, buyerRegisterOtp, buyerPassUpdate};
+   signUpBuyer, loginBuyer, buyerRegisterOtp, buyerPassUpdate,
+   resetBuyerPass};

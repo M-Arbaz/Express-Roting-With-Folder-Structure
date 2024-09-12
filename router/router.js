@@ -7,5 +7,6 @@ router.route('/verify').post(controller.decToken);
 router.route('/buyer/otp_buyer').post(controller.buyerRegisterOtp);
 router.route('/buyer/register_buyer').post(controller.signUpBuyer);
 router.route('/buyer/login_buyer').post(controller.loginBuyer);
-router.route('/buyer/pass_update').post(controller.buyerPassUpdate);
+router.route('/buyer/pass_update_email').post(controller.buyerPassUpdate);
+router.route('/buyer/pass_update_id').post(controller.resetBuyerPass);
 module.exports = router;
