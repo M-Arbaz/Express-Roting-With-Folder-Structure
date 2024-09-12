@@ -169,7 +169,7 @@ const buyerPassUpdate = async (obj)=>{
             html: ` your rest link: ${resetLink}`
         })
         if (buyerEmailResetLink.accepted) {
-            return { message:"success", status:200 };
+            return { message:"success",user_id:found_id._id , status:200 };
         } else {
             return {message: "email sending failed", status:500 };
         }
@@ -184,10 +184,10 @@ const resetBuyerPass = async (obj) =>{
     try{
         const newPass = await schema.buyerModel
         .findByIdAndUpdate(obj._id,{pass:updateNewPass});
-        return  {status:200} ;
+        return  {message:"success",status:200} ;
     } catch (error){
         console.error("error");
-        return {error:error,status:400}
+        return {message:"error",error:error,status:400}
     }
 
 }
