@@ -3,9 +3,12 @@ const port = process.env.PORT || 3001;
 const express = require('express');
 const app = express();  
 const router = require('./router/router');
+const bodyParser = require('body-parser');
 require('./function/dbConnection')();
-
+require('./multerUpload/multer')
 app.use(express.json());
+// app.use(bodyParser.json());
+app.use('/data', express.static('uploads'))
 // Note: check valid syntax come from frontend
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {

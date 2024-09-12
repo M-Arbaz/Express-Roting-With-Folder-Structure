@@ -3,13 +3,8 @@ const functionL = require('../function/function')
 const getFun =(req,res)=>{
   res.status(200).json({message:"Server Running perfectly"})
 }
-const getKey =(req,res)=>{
- return  res.send(functionL.returnKEy());
-}
-const postBody = async (req,res)=>{
-    const result = await functionL.returnSameBody(req.body)
-    res.send(result);
-}
+
+
 const getToken = async(req,res)=>{
  
     const token = await functionL.generateToken(req.body);
@@ -51,6 +46,12 @@ const resetBuyerPass = async (req,res)=>{
   const resetBuyerPass = await functionL.resetBuyerPass(req.body);
   res.status(resetBuyerPass.status ? resetBuyerPass.status : 400 ).json(resetBuyerPass)
 }
-module.exports = {getKey,postBody,getToken, decToken, getFun,
+// multer logic 
+const fileUpload = async (req,res)=>{
+  console.log(req.files)
+  res.send(req.files)
+}
+
+module.exports = {getToken, decToken, getFun,
    signUpBuyer, loginBuyer, buyerRegisterOtp, buyerPassUpdate,
-   resetBuyerPass};
+   resetBuyerPass, fileUpload};

@@ -9,14 +9,6 @@ const query = (param)=>{
   return { $or: [{ email: param }, { name: param }]}
 };
 
-const returnKEy = () => {
-    return key;
-}
-const returnSameBody = (obj) => {
-    const x = obj;
-    x.state = true;
-    return x;
-}
 
 //  spiliting token Logic Here
 function splitToken(token) {
@@ -35,7 +27,7 @@ function splitToken(token) {
     }
 }
 
-
+// generate token
 const generateToken = async (obj) => {
     let split_token;
 
@@ -53,7 +45,7 @@ const generateToken = async (obj) => {
     split_token = splitToken(token);
     return split_token;
 };
-
+// decode token
 const decodeToken = async (a, b, c) => {
     const MergeToken = `${a}.${b}.${c}`;
     let result;
@@ -69,7 +61,7 @@ const decodeToken = async (a, b, c) => {
 
 }
 
-
+// encrypt password
 const passEncrypt = async (pass) => {
     try {
         // Use await to get the hash value directly
@@ -194,8 +186,14 @@ const resetBuyerPass = async (obj) =>{
     }
 
 }
+
+// Do Some multer logic
+// upload file return link 
+const  fileUpload = (body,file) =>{
+console.log(body,file);
+}
 module.exports = {
-    returnKEy, returnSameBody, generateToken,
+     generateToken,
     decodeToken, passEncrypt, passDecrypt, registerBuyer,
-    gerateBuyerOtp, loginBuyer, buyerPassUpdate, resetBuyerPass
+    gerateBuyerOtp, loginBuyer, buyerPassUpdate, resetBuyerPass, fileUpload
 };

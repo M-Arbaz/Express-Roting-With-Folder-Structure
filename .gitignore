@@ -1,4 +1,15 @@
 
 node_modules/
+uploads/
 .env
 package-lock.json
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.tif
+*.svg
+*.webp
+*.ico
