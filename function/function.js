@@ -181,10 +181,14 @@ const buyerPassUpdate = async (obj)=>{
 const resetBuyerPass = async (obj) =>{
 
     const updateNewPass = await passEncrypt(obj.pass)
-    const newPass = await schema.buyerModel
-    .findByIdAndUpdate(obj._id,{pass:updateNewPass});
-    console.log(newPass);
-    return  {status:200} ;
+    try{
+        const newPass = await schema.buyerModel
+        .findByIdAndUpdate(obj._id,{pass:updateNewPass});
+        return  {status:200} ;
+    } catch (error){
+        console.error("error");
+        return {error:error,status:400}
+    }
 
 }
 module.exports = {
