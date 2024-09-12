@@ -39,7 +39,7 @@ const signUpBuyer = async (req,res)=>{
 }
 const loginBuyer = async (req,res)=>{
   const info = await functionL.loginBuyer(req.body);
-  res.status(info.status ? info.status : 200).json(info);
+  res.status(info.status ? info.status : 200).header('Authorization', `Bearer ${info}`).json(info);
 }
 // this will send mail to email
 const buyerPassUpdate = async (req,res)=>{

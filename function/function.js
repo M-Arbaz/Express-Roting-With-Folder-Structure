@@ -136,23 +136,26 @@ const registerBuyer = async (obj) => {
     }
 }
 // login buyer
-const loginBuyer = async(obj)=>{
-const loginBuyer = await schema.buyerModel.findOne(query(obj.param));
-     if(loginBuyer !== null){
-        const checkPass = await passDecrypt(obj.pass,loginBuyer.pass);
-       if(checkPass){
-        const sendData = loginBuyer.toObject()
+const loginBuyer = async (obj) => {
+    const loginBuyers = await schema.buyerModel.find(query(obj.param));
+    if (!loginBuyers || loginBuyers.length === 0) {
+      return { message: "user not found", status: 404 };
+    }
+    for (const loginBuyer of loginBuyers) {
+      const checkPass = await passDecrypt(obj.pass, loginBuyer.pass);
+      if (checkPass) {
+        const sendData = loginBuyer.toObject();
         const token = await generateToken(sendData);
         token.buyer_id = sendData._id;
-        token.message = "success"
+        token.message = "success";
         return token;
-       }else{
-        return {message:"password incorrect",status:401}
-       }
-     }else{
-        return {message:"user not found",status:404};
-     }
-} 
+      }
+    }
+  
+    // If no passwords matched, return incorrect password response
+    return { message: "password incorrect", status: 401 };
+  };
+  
 // update buyer pass
 // this will send mail to user email if user exsist
 const buyerPassUpdate = async (obj)=>{ 
