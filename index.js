@@ -3,7 +3,7 @@ const port = process.env.PORT || 3001;
 const express = require('express');
 const app = express();  
 const router = require('./router/router');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 require('./function/dbConnection')();
 require('./multerUpload/multer')
 app.use(express.json());

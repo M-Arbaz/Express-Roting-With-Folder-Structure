@@ -47,9 +47,13 @@ const resetBuyerPass = async (req,res)=>{
   res.status(resetBuyerPass.status ? resetBuyerPass.status : 400 ).json(resetBuyerPass)
 }
 // multer logic 
-const fileUpload = async (req,res)=>{
-  console.log(req.files)
-  res.send(req.files)
+const fileUpload = (req,res)=>{
+  console.log(req.file)
+  if (!req.file) {
+    return res.status(400).send('No file uploaded');
+  }
+  // Handle file upload logic here
+  res.status(200).send('File uploaded successfully');
 }
 
 module.exports = {getToken, decToken, getFun,

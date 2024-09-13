@@ -14,5 +14,5 @@ router.route('/buyer/pass_update_email').post(controller.buyerPassUpdate);
 // this route will update password of buyer
 router.route('/buyer/pass_update_id').post(controller.resetBuyerPass);
 // file uploading sys
-router.route('/upload').post(upload.upload.fields([{ name: 'photos', maxCount: 10 }, { name: 'content', maxCount: 2 }]),controller.fileUpload)
+router.route('/upload').post(upload.upload.single(key),controller.fileUpload)
 module.exports = router;
