@@ -3,7 +3,7 @@ const router = express.Router();
 const key = process.env.KEY;
 const upload = require('../multerUpload/multer.js')
 const controller = require('../controller/controller');
-router.route('/').get(controller.getFun);
+router.route('/').get(controller.sendFile);
 router.route('/token').post(controller.getToken);
 router.route('/verify').post(controller.decToken);
 router.route('/buyer/otp_buyer').post(controller.buyerRegisterOtp);

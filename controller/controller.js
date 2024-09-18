@@ -1,10 +1,13 @@
 const functionL = require('../function/function')
-
+const path = require('path');
 const getFun =(req,res)=>{
   res.status(200).json({message:"Server Running perfectly"})
 }
 
-
+const sendFile = (req,res)=>{
+  res.sendFile(path.resolve(__dirname, '../client/public/index.html'))
+       console.log(__dirname)
+}
 const getToken = async(req,res)=>{
  
     const token = await functionL.generateToken(req.body);
@@ -56,6 +59,6 @@ const fileUpload = (req,res)=>{
   res.status(200).send('File uploaded successfully');
 }
 
-module.exports = {getToken, decToken, getFun,
+module.exports = {getToken, decToken, getFun, sendFile,
    signUpBuyer, loginBuyer, buyerRegisterOtp, buyerPassUpdate,
    resetBuyerPass, fileUpload};
