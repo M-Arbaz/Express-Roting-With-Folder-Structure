@@ -3,6 +3,8 @@ node_modules/
 uploads/
 .env
 package-lock.json
+client/node_modules/
+client/package-lock.json
 *.png
 *.jpg
 *.jpeg
