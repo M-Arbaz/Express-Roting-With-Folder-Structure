@@ -3,10 +3,12 @@ const port = process.env.PORT || 3001;
 const express = require('express');
 const app = express();  
 const router = require('./router/router');
+const cors = require('cors');
 // const bodyParser = require('body-parser');
 require('./function/dbConnection')();
 require('./multerUpload/multer')
 app.use(express.json());
+app.use(cors())
 // app.use(bodyParser.json());
 app.use('/data', express.static('uploads'))
 // Note: check valid syntax come from frontend
